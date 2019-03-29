@@ -10,6 +10,10 @@ This Add-on works by blocking the operation of JavaScript in your browser, you c
 
 * Firefox 58.0 or later
 
+## Version
+
+Currently in the version 1.0.1
+
 ## Features
 The Add-on currently has the following features:
 
