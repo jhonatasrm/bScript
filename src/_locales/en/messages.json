@@ -1,0 +1,87 @@
+{
+  "extensionName": {
+    "message": "bScript",
+    "description": "Extension name."
+  },
+  "extensionDescription": {
+    "message": "This Add-on works by blocking the operation of JavaScript in your browser, you can also block elements of the page, see the blocked elements and unblock them."
+  },
+  "javascriptEnabled": {
+    "message": "JavaScript Enabled"
+  },
+  "javascriptDisabled": {
+    "message": "JavaScript Disabled"
+  },
+  "works": {
+    "message": "This Add-on works by blocking the operation of JavaScript in your browser, you can also block elements of the page.The recommended is not to enable JavaScript for all pages.This Add-on launches the tab with JavaScript enabled, because some pages may not load correctly. The recommended is to disable JavaScript as soon as possible on the page by clicking the Add-on icon, the preference will be saved for the next visit."
+  },
+  "resources": {
+    "message": "The Add-on currently has the following features:"
+  },
+  "resources1": {
+    "message": "1. Block Ads with the Block Element option"
+  },
+  "resources2": {
+    "message": "2. Block JavaScript by Tab"
+  },
+  "resources3": {
+    "message": "3. See the Blocked Elements in the page"
+  },
+  "resources4": {
+    "message": "4. Unblock Elements in the page"
+  },
+  "about_title": {
+    "message": "About"
+  },
+  "about": {
+    "message": "About bScript"
+  },
+  "preferences": {
+    "message": "Preferences"
+  },
+  "blockElement": {
+    "message": "Block Element"
+  },
+  "unblockElement": {
+    "message": "Unblock Element"
+  },
+  "viewBlockedElement": {
+    "message": "View Blocked Elements"
+  },
+  "contextMenu": {
+    "message": "Context menu"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "note": {
+    "message": "Note: This Add-on is completely free! Please consider make a small donation or write an review at addons.mozilla.org. Thank you!"
+  },
+  "bugs": {
+    "message": "If you find any bugs, have any suggestions or some ideas for this add-on: Please create a new issue."
+  },
+  "blockElementFromThePage": {
+    "message": "Block the element from the page ?"
+  },
+  "shortcuts": {
+    "message": "Shortcuts"
+  },
+  "cookies": {
+    "message": "Cookies is full !"
+  },
+  "shortcutsTips1": {
+    "message": "1. Block Element: Alt+B"
+  },
+  "shortcutsTips2": {
+    "message": "2. See Blocked Elements: Alt+U"
+  },
+  "shortcutsTips3": {
+    "message": "3. Unblock Elements: Alt+L"
+  },
+  "description_contextmenu": {
+    "message": "Allow or not the Context menu"
+  },
+  "version": {
+    "message": "bScript (v1.0.2)"
+  }
+}

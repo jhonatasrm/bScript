@@ -1,3 +1,8 @@
+[<img align="right" src="https://img.shields.io/github/issues/jhonatasrm/bScript.svg">](https://github.com/jhonatasrm/bScripts/issues)
+[<img align="right" src="https://img.shields.io/github/license/jhonatasrm/bScript.svg">](https://github.com/jhonatasrm/bScript/blob/master/LICENSE)
+[<img align="right" src="https://img.shields.io/github/forks/jhonatasrm/bScript.svg">]()
+[<img align="right" src="https://img.shields.io/github/stars/jhonatasrm/bScript.svg">]()
+[<img align="right" src="https://img.shields.io/github/release/jhonatasrm/bScript.svg">](https://github.com/jhonatasrm/bScript/releases)
 ![bScript](bScript.png)
 # bScript <a href='https://ko-fi.com/S6S5S3WU' target='_blank'><img align="right" height='36' style='border:0px;height:36px;' src='https://az743702.vo.msecnd.net/cdn/kofi1.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com'/></a>[<img align="right" src="https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_2.png">](https://addons.mozilla.org/en-US/firefox/addon/bScript/)
 
@@ -9,10 +14,6 @@ This Add-on works by blocking the operation of JavaScript in your browser, you c
 ## Requirements
 
 * Firefox 58.0 or later
-
-## Version
-
-Currently in the version 1.0.1
 
 ## Features
 The Add-on currently has the following features:
@@ -36,6 +37,8 @@ The Add-on currently has the following features:
 ## How Contribute
 
 Have a suggestion, doubt or encountered an error? Please open a new [issue](https://github.com/jhonatasrm/bScript/issues)
+
+Contributions are welcome, feel free to submit a pull :)
 
 ## Learn More
 To learn more about webextensions development, see this [Mozilla developer Network documentation](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)

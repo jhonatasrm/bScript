@@ -1,0 +1,88 @@
+{
+  "extensionName": {
+    "message": "bScript",
+    "description": "Extension name."
+  },
+  "extensionDescription": {
+    "message": "Esta extensão funciona bloqueando a operação do JavaScript no seu navegador, você também pode bloquear elementos da página, ver os elementos bloqueados e desbloqueá-los."
+  },
+  "javascriptEnabled": {
+    "message": "JavaScript Habilitado"
+  },
+  "javascriptDisabled": {
+    "message": "JavaScript Desabilitado"
+  },
+  "works": {
+    "message": "Esta extensão funciona bloqueando o funcionamento do JavaScript no seu navegador, você também pode bloquear os elementos da página. O recomendado é não habilitar o JavaScript para todas as páginas. Esta extensão inicia a aba com o JavaScript habilitado, pois algumas páginas podem não carregar corretamente. O recomendado é desabilitar o JavaScript assim que possível na página, clicando o ícone do Add-on, a preferência será salva para a próxima visita."
+  },
+  "resources": {
+    "message": "A extensão possui atualmente os seguintes recursos:"
+  },
+  "resources1": {
+    "message": "1. Bloqueie Ads com a opção de Bloquear Elemento"
+  },
+  "resources2": {
+    "message": "2. Bloquear JavaScript por Aba"
+  },
+  "resources3": {
+    "message": "3. Veja os Elementos Bloqueados na página"
+  },
+  "resources4": {
+    "message": "4. Desbloquear Elementos na página"
+  },
+  "about_title": {
+    "message": "Sobre"
+  },
+  "about": {
+    "message": "Sobre o bScript"
+  },
+  "preferences": {
+    "message": "Preferências"
+  },
+  "blockElement": {
+    "message": "Bloquear Elemento"
+  },
+  "unblockElement": {
+    "message": "Desbloquear Elemento"
+  },
+  "viewBlockedElement": {
+    "message": "Visualizar Elementos Bloqueados"
+  },
+  "contextMenu": {
+    "message": "Menu de contexto"
+  },
+  "settings": {
+    "message": "Configurações"
+  },
+  "note": {
+    "message": "Nota: Esta extensão é totalmente gratuita! Por favor, considere fazer uma pequena doação ou análise em addons.mozilla.org. Obrigado! "
+  },
+  "bugs": {
+    "message": "Se você encontrar algum bug, tiver sugestões ou algumas idéias para esta extensão. Por favor, crie uma nova issue."
+  },
+  "blockElementFromThePage": {
+    "message": "Deseja bloquear este elemento da página ?"
+  },
+  "shortcuts": {
+    "message": "Atalhos"
+  },
+  "cookies": {
+    "message": "Os cookies estão cheios !"
+  },
+  "description_contextmenu": {
+    "message": "Permite ou não o Menu de contexto"
+  },
+  "shortcutsTips1": {
+    "message": "1. Bloquear Elemento: Alt+B"
+  },
+  "shortcutsTips2": {
+    "message": "2. Visualizar Elementos Bloqueados: Alt+U"
+  },
+  "shortcutsTips3": {
+    "message": "3. Desbloquear Elementos: Alt+L"
+  },
+  "version": {
+    "message": "bScript (v1.0.2)"
+  }
+}
+
