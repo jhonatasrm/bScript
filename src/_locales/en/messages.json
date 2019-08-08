@@ -80,8 +80,5 @@
   },
   "description_contextmenu": {
     "message": "Allow or not the Context menu"
-  },
-  "version": {
-    "message": "bScript (v1.0.2)"
   }
 }

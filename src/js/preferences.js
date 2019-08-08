@@ -2,6 +2,11 @@
 var backgroundPage = browser.extension.getBackgroundPage();
 var radios = document.getElementsByName("contextMenu");
 
+// version
+var version = document.getElementById("version");
+version.textContent = browser.runtime.getManifest().name + " (v"+ browser.runtime.getManifest().version + ")";
+
+
 $(document).ready(function(){
     var val = localStorage.getItem('contextMenu');
 	for(var i=0;i<radios.length;i++){
