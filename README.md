@@ -4,15 +4,16 @@
 [<img align="right" src="https://img.shields.io/github/stars/jhonatasrm/bScript.svg">]()
 [<img align="right" src="https://img.shields.io/github/release/jhonatasrm/bScript.svg">](https://github.com/jhonatasrm/bScript/releases)
 ![bScript](bScript.png)
+
 # bScript [<img align="right" src="https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_2.png">](https://addons.mozilla.org/en-US/firefox/addon/bScript/)
 
 This Add-on works by blocking the operation of JavaScript in your browser, you can also block elements of the page. The recommended is not to enable JavaScript for all pages. This Add-on launches the tab with JavaScript enabled, because some pages may not load correctly. The recommended is to disable JavaScript as soon as possible on the page by clicking the Add-on icon, the preference will be saved for the next visit.
+
 ![bScript Screenshot](bScript.gif)
 
 
 
 ## Requirements
-
 * Firefox 58.0 or later
 
 ## Features
@@ -27,7 +28,6 @@ The Add-on currently has the following features:
 4. Unblock Elements in the page
 
 ## Shortcuts
-
 1. Block Element: Alt+B
 
 2. See Blocked Elements: Alt+U
@@ -35,7 +35,6 @@ The Add-on currently has the following features:
 3. Unblock Elements: Alt+L
 
 ## How Contribute
-
 Have a suggestion, doubt or encountered an error? Please open a new [issue](https://github.com/jhonatasrm/bScript/issues)
 
 Contributions are welcome, feel free to submit a pull :)
