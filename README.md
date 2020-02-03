@@ -35,12 +35,12 @@ The Add-on currently has the following features:
 3. Unblock Elements: Alt+L
 
 ## How Contribute
-Have a suggestion, doubt or encountered an error? Please open a new [issue](https://github.com/jhonatasrm/bScript/issues)
+Have a suggestion, doubt or encountered an error? Please open a new [issue](https://github.com/jhonatasrm/bScript/issues).
 
-Contributions are welcome, feel free to submit a pull :)
+Contributions are welcome, feel free to submit a pull. :)
 
 ## Learn More
-To learn more about webextensions development, see this [Mozilla developer Network documentation](https://developer.mozilla.org/en-US/Add-ons/WebExtensions)
+To learn more about webextensions development, see this [Mozilla developer Network documentation](https://developer.mozilla.org/en-US/Add-ons/WebExtensions).
 
 ### License
-This repository is available under the [Mozilla Public License, version 2.0](https://github.com/jhonatasrm/bScript/blob/master/LICENSE)
+This repository is available under the [Mozilla Public License, version 2.0](https://github.com/jhonatasrm/bScript/blob/master/LICENSE).
