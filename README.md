@@ -7,7 +7,7 @@
 
 # bScript [<img align="right" src="https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_2.png">](https://addons.mozilla.org/en-US/firefox/addon/bScript/)
 
-This Add-on works by blocking the operation of JavaScript in your browser, you can also block elements of the page. The recommended is not to enable JavaScript for all pages. This Add-on launches the tab with JavaScript enabled, because some pages may not load correctly. The recommended is to disable JavaScript as soon as possible on the page by clicking the Add-on icon, the preference will be saved for the next visit.
+This Add-on works by blocking the operation of JavaScript in your browser, you can also block elements of the page. The recommendation is not to enable JavaScript for all pages. This Add-on launches the tab with JavaScript enabled, because some pages may not load correctly. The recommended is to disable JavaScript as soon as possible on the page by clicking the Add-on icon, the preference will be saved for the next visit.
 
 ![bScript Screenshot](bScript.gif)
 
