@@ -37,7 +37,9 @@ The Add-on currently has the following features:
 ## How Contribute
 Have a suggestion, doubt or encountered an error? Please open a new [issue](https://github.com/jhonatasrm/bScript/issues).
 
-Contributions are welcome, feel free to submit a pull. :)
+Contributions are welcome, feel free to submit a pull.
+
+:)
 
 ## Learn More
 To learn more about webextensions development, see this [Mozilla developer Network documentation](https://developer.mozilla.org/en-US/Add-ons/WebExtensions).
