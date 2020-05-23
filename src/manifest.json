@@ -5,7 +5,7 @@
   "version": "1.0.2",
   "homepage_url": "https://github.com/jhonatasrm/bScript",
   "default_locale": "en",
-  "author": "Jhonatas Rodrigues",
+  "author": "Jhonatas Machado",
   "applications": {
     "gecko": {
       "id": "bScript@jhonatasrm.com",
