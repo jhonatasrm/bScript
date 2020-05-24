@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "homepage_url": "https://github.com/jhonatasrm/bScript",
   "default_locale": "en",
   "author": "Jhonatas Machado",
@@ -24,20 +24,13 @@
   "content_scripts": [
     {
       "all_frames": true,
-      "js": [
-        "/js/bScript.js"
-      ],
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
+      "js": ["/js/bScript.js"],
+      "matches": ["http://*/*", "https://*/*"],
       "run_at": "document_start"
     }
   ],
   "background": {
-    "scripts": [
-      "/js/background.js"
-    ]
+    "scripts": ["/js/background.js"]
   },
   "options_ui": {
     "browser_style": false,
