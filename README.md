@@ -37,9 +37,10 @@ The Add-on currently has the following features:
 ## How Contribute
 Have a suggestion, doubt or encountered an error? Please open a new [issue](https://github.com/jhonatasrm/bScript/issues).
 
-Contributions are welcome, feel free to submit a pull.
+Contributions are welcome, feel free to submit a pull. :)
 
-:)
+### Bitcoin
+[bc1qkxka7h3rxhejefyjp30agzywpyt2hw9manscyw](https://www.blockchain.com/btc/address/bc1qkxka7h3rxhejefyjp30agzywpyt2hw9manscyw)
 
 ## Learn More
 To learn more about webextensions development, see this [Mozilla developer Network documentation](https://developer.mozilla.org/en-US/Add-ons/WebExtensions).
