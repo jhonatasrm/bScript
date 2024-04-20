@@ -1,32 +1,23 @@
-var imported = document.createElement("bScript.js");
 const javascriptEnabled = { 32: "../res/icons/bScript_enabled-32.png" };
 const javascriptDisabled = { 32: "../res/icons/bScript_disabled-32.png" };
-var style,
-  _style,
-  enabled = false,
-  prefix = "ujs_bScript",
-  none = "{display: none !important;}";
+const prefix = "ujs_bScript";
 
-function is_whitelisted(dict, host) {
-  let whitelist_js = true;
-  if (dict[host] !== undefined) {
-    whitelist_js = dict[host];
-  }
-  return whitelist_js;
+async function isWhitelisted(host) {
+  const item = await browser.storage.local.get(host);
+  return !!item[host];
 }
 
-function add_csp_nojs_header(response) {
-  let host = new URL(response.url).hostname;
-  let headers = response.responseHeaders;
+function addCspNoJsHeader(response) {
+  const host = new URL(response.url).hostname;
+  const headers = response.responseHeaders;
   return new Promise((resolve) => {
-    browser.storage.local.get(host).then((item) => {
-      let whitelist_js = is_whitelisted(item, host);
-      if (!whitelist_js) {
-        var new_csp = {
+    isWhitelisted(host).then((whitelistJs) => {
+      if (!whitelistJs) {
+        const newCsp = {
           name: "Content-Security-Policy",
           value: "script-src 'none';",
         };
-        headers.push(new_csp);
+        headers.push(newCsp);
       }
       resolve({ responseHeaders: headers });
     });
@@ -34,53 +25,42 @@ function add_csp_nojs_header(response) {
 }
 
 browser.webRequest.onHeadersReceived.addListener(
-  add_csp_nojs_header,
+  addCspNoJsHeader,
   { urls: ["<all_urls>"], types: ["main_frame"] },
   ["blocking", "responseHeaders"]
 );
 
-browser.tabs.onUpdated.addListener((id, changeInfo) => {
+browser.tabs.onUpdated.addListener((id, changeInfo, tab) => {
   if (changeInfo.url) {
-    let host = new URL(changeInfo.url).hostname;
-    browser.storage.local.get(host).then((item) => {
-      let whitelist_js = is_whitelisted(item, host);
-      let status_icon = whitelist_js ? javascriptEnabled : javascriptDisabled;
-      browser.pageAction.setIcon({ path: status_icon, tabId: id });
-      let status_title = whitelist_js
+    const host = new URL(changeInfo.url).hostname;
+    isWhitelisted(host).then((whitelistJs) => {
+      const statusIcon = whitelistJs ? javascriptEnabled : javascriptDisabled;
+      browser.pageAction.setIcon({ path: statusIcon, tabId: id });
+      const statusTitle = whitelistJs
         ? browser.i18n.getMessage("javascriptEnabled")
         : browser.i18n.getMessage("javascriptDisabled");
-      browser.pageAction.setTitle({ title: status_title, tabId: id });
+      browser.pageAction.setTitle({ title: statusTitle, tabId: id });
     });
   }
   browser.pageAction.show(id);
 });
 
-browser.pageAction.onClicked.addListener(activateOrNotbScript);
-
-function activateOrNotbScript(tab) {
-  let host = new URL(tab.url).hostname;
-  browser.storage.local.get(host).then((item) => {
-    let whitelist_js = is_whitelisted(item, host);
-    let to_store = {};
-    to_store[host] = !whitelist_js;
-    browser.storage.local.set(to_store).then(function () {
-      browser.tabs.reload();
+browser.pageAction.onClicked.addListener((tab) => {
+  const host = new URL(tab.url).hostname;
+  isWhitelisted(host).then((whitelistJs) => {
+    const toStore = {};
+    toStore[host] = !whitelistJs;
+    browser.storage.local.set(toStore).then(() => {
+      browser.tabs.reload(tab.id);
     });
   });
-}
+});
 
 // Context menu
-function onCreated() {
-  if (browser.runtime.lastError) {
-    console.log(`Error: ${browser.runtime.lastError}`);
-  }
-}
-
 function startContextMenu() {
-  if (
-    localStorage.getItem("contextMenu") == "True" ||
-    localStorage.getItem("contextMenu") == null
-  ) {
+  const contextMenuEnabled =
+    localStorage.getItem("contextMenu") !== "False";
+  if (contextMenuEnabled || localStorage.getItem("contextMenu") === null) {
     browser.menus.create(
       {
         id: "bScript",
@@ -94,10 +74,14 @@ function startContextMenu() {
   }
 }
 
+function onCreated() {
+  if (browser.runtime.lastError) {
+    console.error(`Error: ${browser.runtime.lastError}`);
+  }
+}
+
 browser.menus.onClicked.addListener((info, tab) => {
-  switch (info.menuItemId) {
-    case "bScript":
-      activateOrNotbScript(tab);
-      break;
+  if (info.menuItemId === "bScript") {
+    activateOrNotbScript(tab);
   }
 });

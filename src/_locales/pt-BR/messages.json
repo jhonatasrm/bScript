@@ -73,13 +73,13 @@
     "message": "Permite ou não o Menu de contexto"
   },
   "shortcutsTips1": {
-    "message": "1. Bloquear Elemento: Alt+B"
+    "message": "1. Bloquear Elemento: Alt + Shift + N"
   },
   "shortcutsTips2": {
-    "message": "2. Visualizar Elementos Bloqueados: Alt+U"
+    "message": "2. Visualizar Elementos Bloqueados: Alt + Shift + X"
   },
   "shortcutsTips3": {
-    "message": "3. Desbloquear Elementos: Alt+L"
+    "message": "3. Desbloquear Elementos: Alt + Shift + M"
   }
 }
 

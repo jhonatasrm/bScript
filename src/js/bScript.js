@@ -299,18 +299,15 @@ function blockElement(wide) {
 document.addEventListener(
   "keydown",
   function (e) {
-    if (!e.shiftKey && !e.ctrlKey && e.altKey) {
-      switch (e.keyCode) {
-        case 85:
-          unblockElement();
-          break;
-        case 66:
-          blockElement();
-          break;
-        case 76:
-          unblockElement(true);
-          break;
-      }
+    if (e.altKey && e.shiftKey && e.keyCode === 78) { // Alt + Shift + N
+      // block element
+      blockElement();
+    } else if (e.altKey && e.shiftKey && e.keyCode === 88) { // Alt + Shift + X
+      // see blocked elements
+      unblockElement();
+    } else if (e.altKey && e.shiftKey && e.keyCode === 77) { // Alt + Shift + M
+      // undo block element
+      unblockElement(true);
     }
   },
   false
