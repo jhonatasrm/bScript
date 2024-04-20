@@ -28,11 +28,11 @@ The Add-on currently has the following features:
 4. Unblock Elements in the page
 
 ## Shortcuts
-1. Block Element: Alt+B
+1. Block Element: Alt + Shift + N
 
-2. See Blocked Elements: Alt+U
+2. See Blocked Elements: Alt + Shift + X
 
-3. Unblock Elements: Alt+L
+3. Unblock Elements: Alt + Shift + M
 
 ## How Contribute
 Have a suggestion, doubt or encountered an error? Please open a new [issue](https://github.com/jhonatasrm/bScript/issues).

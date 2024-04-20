@@ -1,24 +1,19 @@
-// contextMenu radio
 var backgroundPage = browser.extension.getBackgroundPage();
-var radios = document.getElementsByName("contextMenu");
 
-// version
 var version = document.getElementById("version");
-version.textContent =
-  browser.runtime.getManifest().name +
-  " (v" +
-  browser.runtime.getManifest().version +
-  ")";
+var manifest = browser.runtime.getManifest();
+version.textContent = `${manifest.name} (v${manifest.version})`;
 
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function() {
+  var radios = document.querySelectorAll('input[name="contextMenu"]');
   var val = localStorage.getItem("contextMenu");
-  for (var i = 0; i < radios.length; i++) {
-    if (radios[i].value == val) {
-      radios[i].checked = true;
+  radios.forEach(radio => {
+    if (radio.value === val) {
+      radio.checked = true;
     }
-  }
-  $('input[name="contextMenu"]').on("change", function () {
-    localStorage.setItem("contextMenu", $(this).val());
-    backgroundPage.startContextMenu();
+    radio.addEventListener("change", function() {
+      localStorage.setItem("contextMenu", this.value);
+      backgroundPage.startContextMenu();
+    });
   });
 });

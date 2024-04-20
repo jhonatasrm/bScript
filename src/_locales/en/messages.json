@@ -70,13 +70,13 @@
     "message": "Cookies is full !"
   },
   "shortcutsTips1": {
-    "message": "1. Block Element: Alt+B"
+    "message": "1. Block Element: Alt + Shift + N "
   },
   "shortcutsTips2": {
-    "message": "2. See Blocked Elements: Alt+U"
+    "message": "2. See Blocked Elements: Alt + Shift + X"
   },
   "shortcutsTips3": {
-    "message": "3. Unblock Elements: Alt+L"
+    "message": "3. Unblock Elements: Alt + Shift + M"
   },
   "description_contextmenu": {
     "message": "Allow or not the Context menu"
