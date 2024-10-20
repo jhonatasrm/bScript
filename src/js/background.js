@@ -1,91 +1,103 @@
-var imported = document.createElement("bScript.js");
+// Constants for icons and script status
 const javascriptEnabled = { 32: "../res/icons/bScript_enabled-32.png" };
 const javascriptDisabled = { 32: "../res/icons/bScript_disabled-32.png" };
-var style,
-  _style,
-  enabled = false,
-  prefix = "ujs_bScript",
-  none = "{display: none !important;}";
+const prefix = "ujs_bScript";
+const none = "{display: none !important;}";
+let enabled = false;
 
-function is_whitelisted(dict, host) {
-  let whitelist_js = true;
-  if (dict[host] !== undefined) {
-    whitelist_js = dict[host];
-  }
-  return whitelist_js;
+// Check if host is whitelisted
+function isWhitelisted(storage, host) {
+  return storage[host] !== undefined ? storage[host] : true;
 }
 
-function add_csp_nojs_header(response) {
-  let host = new URL(response.url).hostname;
-  let headers = response.responseHeaders;
+// Add Content-Security-Policy header to block JavaScript if not whitelisted
+function addCspNoJsHeader(response) {
+  const host = new URL(response.url).hostname;
+  const headers = response.responseHeaders;
+
   return new Promise((resolve) => {
-    browser.storage.local.get(host).then((item) => {
-      let whitelist_js = is_whitelisted(item, host);
-      if (!whitelist_js) {
-        var new_csp = {
+    browser.storage.local.get(host).then((storage) => {
+      const whitelistJs = isWhitelisted(storage, host);
+      if (!whitelistJs) {
+        headers.push({
           name: "Content-Security-Policy",
           value: "script-src 'none';",
-        };
-        headers.push(new_csp);
+        });
       }
       resolve({ responseHeaders: headers });
     });
   });
 }
 
+// Listen for incoming headers and modify if necessary
 browser.webRequest.onHeadersReceived.addListener(
-  add_csp_nojs_header,
+  addCspNoJsHeader,
   { urls: ["<all_urls>"], types: ["main_frame"] },
   ["blocking", "responseHeaders"]
 );
 
+// Update page action icon and title based on the whitelist status
+function updatePageActionIcon(id, url) {
+  const host = new URL(url).hostname;
+
+  browser.storage.local.get(host).then((storage) => {
+    const whitelistJs = isWhitelisted(storage, host);
+    const statusIcon = whitelistJs ? javascriptEnabled : javascriptDisabled;
+    const statusTitle = whitelistJs
+      ? browser.i18n.getMessage("javascriptEnabled")
+      : browser.i18n.getMessage("javascriptDisabled");
+
+    browser.pageAction.setIcon({ path: statusIcon, tabId: id });
+    browser.pageAction.setTitle({ title: statusTitle, tabId: id });
+    browser.pageAction.show(id); // Show the page action after updating
+  });
+}
+
+// Listen for tab updates and refresh the icon and title
 browser.tabs.onUpdated.addListener((id, changeInfo) => {
   if (changeInfo.url) {
-    let host = new URL(changeInfo.url).hostname;
-    browser.storage.local.get(host).then((item) => {
-      let whitelist_js = is_whitelisted(item, host);
-      let status_icon = whitelist_js ? javascriptEnabled : javascriptDisabled;
-      browser.pageAction.setIcon({ path: status_icon, tabId: id });
-      let status_title = whitelist_js
-        ? browser.i18n.getMessage("javascriptEnabled")
-        : browser.i18n.getMessage("javascriptDisabled");
-      browser.pageAction.setTitle({ title: status_title, tabId: id });
-    });
+    updatePageActionIcon(id, changeInfo.url);
   }
-  browser.pageAction.show(id);
 });
 
-browser.pageAction.onClicked.addListener(activateOrNotbScript);
+// Toggle JavaScript activation for the current host
+function toggleJavaScript(tab) {
+  const host = new URL(tab.url).hostname;
 
-function activateOrNotbScript(tab) {
-  let host = new URL(tab.url).hostname;
-  browser.storage.local.get(host).then((item) => {
-    let whitelist_js = is_whitelisted(item, host);
-    let to_store = {};
-    to_store[host] = !whitelist_js;
-    browser.storage.local.set(to_store).then(function () {
-      let status_icon = !whitelist_js ? javascriptEnabled : javascriptDisabled;
-      let status_title = !whitelist_js
-        ? browser.i18n.getMessage("javascriptEnabled")
-        : browser.i18n.getMessage("javascriptDisabled");
-      browser.pageAction.setIcon({ path: status_icon, tabId: tab.id });
-      browser.pageAction.setTitle({ title: status_title, tabId: tab.id });
+  browser.storage.local.get(host).then((storage) => {
+    const whitelistJs = isWhitelisted(storage, host);
+    const updatedStatus = !whitelistJs;
+    const statusIcon = updatedStatus ? javascriptEnabled : javascriptDisabled;
+    const statusTitle = updatedStatus
+      ? browser.i18n.getMessage("javascriptEnabled")
+      : browser.i18n.getMessage("javascriptDisabled");
+
+    // Store the new whitelist status and update the page action
+    browser.storage.local.set({ [host]: updatedStatus }).then(() => {
+      browser.pageAction.setIcon({ path: statusIcon, tabId: tab.id });
+      browser.pageAction.setTitle({ title: statusTitle, tabId: tab.id });
+
+      // Reload the page after toggling JavaScript
+      browser.tabs.reload(tab.id);
     });
   });
 }
 
-// Context menu
+// Listen for page action icon clicks to toggle JavaScript
+browser.pageAction.onClicked.addListener(toggleJavaScript);
+
+// Handle the creation of context menu items
 function onCreated() {
   if (browser.runtime.lastError) {
-    console.log(`Error: ${browser.runtime.lastError}`);
+    console.error(`Error: ${browser.runtime.lastError}`);
   }
 }
 
-function startContextMenu() {
-  if (
-    localStorage.getItem("contextMenu") == "True" ||
-    localStorage.getItem("contextMenu") == null
-  ) {
+// Create or remove the context menu based on localStorage settings
+function manageContextMenu() {
+  const contextMenuSetting = localStorage.getItem("contextMenu");
+
+  if (contextMenuSetting === "True" || contextMenuSetting === null) {
     browser.menus.create(
       {
         id: "bScript",
@@ -99,10 +111,16 @@ function startContextMenu() {
   }
 }
 
+// Listen for context menu item clicks
 browser.menus.onClicked.addListener((info, tab) => {
-  switch (info.menuItemId) {
-    case "bScript":
-      activateOrNotbScript(tab);
-      break;
+  if (info.menuItemId === "bScript") {
+    toggleJavaScript(tab);
+  }
+});
+
+// Shows the page action icon when the tab is updated
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.status === 'complete') {
+    browser.pageAction.show(tabId);
   }
 });

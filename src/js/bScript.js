@@ -1,237 +1,195 @@
-var style,
-  _style,
-  enabled = false,
-  prefix = "ujs_bScript",
-  none = "{display: none !important;}";
+let style, enabled = false;
+const prefix = "ujs_bScript";
+const none = "{display: none !important;}";
 
-var getValue = function (name) {
+// Get value from localStorage or cookies
+const getValue = (name) => {
   if (window.localStorage) {
     return window.localStorage[name] || "";
   } else {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(";");
-    for (var i = 0, c; (c = ca[i]); i++) {
-      while (c.charAt(0) == " ") c = c.substring(1, c.length);
-      if (c.indexOf(nameEQ) == 0)
-        return unescape(c.substring(nameEQ.length, c.length));
+    const nameEQ = name + "=";
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+      cookie = cookie.trim();
+      if (cookie.indexOf(nameEQ) === 0) {
+        return unescape(cookie.substring(nameEQ.length));
+      }
     }
     return "";
   }
 };
 
-var setValue = function (name, value, days) {
+// Set value in localStorage or cookies
+const setValue = (name, value, days) => {
   if (window.localStorage) {
     window.localStorage[name] = value;
   } else {
-    var date = new Date();
+    const date = new Date();
     date.setTime(date.getTime() + (days || 10 * 365) * 24 * 60 * 60 * 1000);
-    if (
-      document.cookie.split(";").length < 30 &&
-      document.cookie.length -
-        escape(getValue(name)).length +
-        escape(value).length <
-        4000
-    ) {
-      document.cookie =
-        name +
-        "=" +
-        escape(value) +
-        "; expires=" +
-        date.toGMTString() +
-        "; path=/";
+    if (document.cookie.split(";").length < 30 && document.cookie.length - escape(getValue(name)).length + escape(value).length < 4000) {
+      document.cookie = `${name}=${escape(value)}; expires=${date.toGMTString()}; path=/`;
     } else {
       alert(browser.i18n.getMessage("cookies"));
     }
   }
 };
 
-var addStyle = function (css) {
-  var s = document.createElement("style");
-  s.setAttribute("type", "text/css");
-  s.setAttribute("style", "display: none !important;");
-  s.appendChild(document.createTextNode(css));
-  return (
-    document.getElementsByTagName("head")[0] || document.documentElement
-  ).appendChild(s);
+// Add style element to the document
+const addStyle = (css) => {
+  const styleElement = document.createElement("style");
+  styleElement.type = "text/css";
+  styleElement.style.display = "none !important";
+  styleElement.appendChild(document.createTextNode(css));
+  return (document.head || document.documentElement).appendChild(styleElement);
 };
 
-var addScript = function (css) {
-  var s = document.createElement("script");
-  s.setAttribute("type", "text/javascript");
-  s.setAttribute("style", "display: none !important;");
-  s.appendChild(document.createTextNode(css));
-  if (document.getElementsByTagName("head").length) {
-    return document.getElementsByTagName("head")[0].appendChild(s);
-  }
+// Add script element to the document
+const addScript = (js) => {
+  const scriptElement = document.createElement("script");
+  scriptElement.type = "text/javascript";
+  scriptElement.style.display = "none !important";
+  scriptElement.appendChild(document.createTextNode(js));
+  return document.head ? document.head.appendChild(scriptElement) : null;
 };
 
-var replaceStyle = function (element, css) {
+// Replace the content of an existing style element
+const replaceStyle = (element, css) => {
   if (element) {
-    if (element.firstChild) element.removeChild(element.firstChild);
-    element.appendChild(document.createTextNode(css));
+    element.textContent = css;
   }
 };
 
-var splitCss = function (css) {
-  var rez = [];
-  css.replace(/(([\w#:.~>+()\s-]+|\*|\[.*?\])+)\s*(,|$)/g, function (s, m) {
-    rez.push(m.replace(/^\s+|\s+$/g, ""));
-  });
-  return rez;
+// Split CSS selectors and return them as an array
+const splitCss = (css) => {
+  return css.match(/(([\w#:.~>+()\s-]+|\*|\[.*?\])+)\s*(,|$)/g).map(s => s.trim());
 };
 
-var clearCss = function (css) {
-  var a = splitCss(css);
-  for (var i = a.length - 1; i >= 0; i--) {
-    var rule = a[i] + ">";
-    for (var j = a.length - 1; j >= 0; j--) {
-      if (a[j].indexOf(rule) == 0) a.splice(j, 1);
-    }
-  }
-  return a.join(",");
+// Clear redundant CSS rules
+const clearCss = (css) => {
+  const selectors = splitCss(css);
+  return selectors.filter((rule, i, arr) => !arr.some((r, j) => j !== i && r.startsWith(rule + ">"))).join(",");
 };
 
-var delCss = function (css, del) {
-  var a = splitCss(css);
+// Remove specific CSS rules
+const delCss = (css, del) => {
+  const selectors = splitCss(css);
   if (del) {
-    for (var i = a.length - 1; i >= 0; i--) {
-      if (del.indexOf(a[i]) == 0) a.splice(i, 1);
-    }
-  } else {
-    a.pop();
+    return selectors.filter(s => !del.startsWith(s)).join(",");
   }
-  return a.join(",");
+  return selectors.slice(0, -1).join(",");
 };
 
-var getAtt = function (element, tags) {
-  var rez = "";
+// Get specific attributes from an element
+const getAttributes = (element, tags) => {
+  let result = "";
+  const regex = new RegExp(`^(${tags})$`);
   if (element.attributes) {
-    var r = new RegExp("^(" + tags + ")$");
-    for (var i = 0, a; (a = element.attributes[i]); i++) {
-      var n = a.nodeName.toLowerCase();
-      if (r.test(n))
-        rez +=
-          "[" +
-          n +
-          "=\x22" +
-          a.nodeValue.replace(/[\x22\x5C]/g, "\\$&") +
-          "\x22]";
-    }
-  }
-  return rez;
-};
-
-var getNth = function (element) {
-  var nth,
-    n = 0,
-    p = element.parentNode;
-  for (var i = 0, c; (c = p.childNodes[i]); i++) {
-    if (c.nodeType == 1) {
-      n++;
-      if (c == element) nth = n;
-    }
-  }
-  return !nth || n < 2 ? "" : ":nth-child(" + nth + ")";
-};
-
-var getCssRules = function (element, wide) {
-  var att,
-    tag,
-    rez = [];
-  while (element) {
-    if (element.nodeType == 1) {
-      att = getAtt(element, "src") || getAtt(element, "href");
-      tag = element.nodeName;
-      if (att) {
-        rez.unshift(
-          tag +
-            (wide
-              ? att.replace(/^(\[\w+)(=\x22[^?#]+\/).*(\x22\])$/, "$1^$2$3")
-              : att)
-        );
-        break;
-      } else {
-        rez.unshift(
-          tag +
-            getAtt(element, "id|class|height|width|color|bgcolor|align|type") +
-            (wide || /^(html|body)$/i.test(tag) ? "" : getNth(element))
-        );
+    for (let attr of element.attributes) {
+      const name = attr.nodeName.toLowerCase();
+      if (regex.test(name)) {
+        result += `[${name}="${attr.nodeValue.replace(/["\\]/g, "\\$&")}"]`;
       }
     }
-    element = element.parentNode;
   }
-  return rez.join(">");
+  return result;
 };
 
-var setBlockStyle = function () {
+// Get nth-child selector
+const getNth = (element) => {
+  let nth, count = 0, parent = element.parentNode;
+  for (let i = 0; i < parent.childNodes.length; i++) {
+    const child = parent.childNodes[i];
+    if (child.nodeType === 1) {
+      count++;
+      if (child === element) {
+        nth = count;
+      }
+    }
+  }
+  return !nth || count < 2 ? "" : `:nth-child(${nth})`;
+};
+
+// Get CSS rules based on element attributes
+const getCssRules = (element, wide) => {
+  let att, tag, result = [];
+  while (element && element.nodeType === 1) {
+    att = getAttributes(element, "src|href");
+    tag = element.nodeName.toLowerCase();
+    result.unshift(
+      att
+        ? `${tag}${wide ? att.replace(/(\[.*?)(=.*\/)[^?#]*(\])/, "$1^$2$3") : att}`
+        : `${tag}${getAttributes(element, "id|class|height|width|color|bgcolor|align|type")}${!wide && !/^(html|body)$/i.test(tag) ? getNth(element) : ""}`
+    );
+    element = element.parentNode;
+  }
+  return result.join(">");
+};
+
+// Set the block style on the page
+const setBlockStyle = () => {
   if (document.documentElement instanceof HTMLHtmlElement) {
-    var css = getValue(prefix);
+    const css = getValue(prefix);
     if (css) style = addStyle(css + none);
     return true;
   }
 };
 
-function unblockElement(latest) {
-  var css = getValue(prefix);
+// Unblock a previously blocked element
+const unblockElement = (latest) => {
+  const css = getValue(prefix);
   if (enabled || !style || !css) return;
-  var remove = function () {
-    document.removeEventListener("click", click, false);
-    document.removeEventListener("keyup", press, false);
+
+  const remove = () => {
+    document.removeEventListener("click", clickHandler, false);
+    document.removeEventListener("keyup", keyupHandler, false);
     enabled = false;
   };
 
-  var click = function (event) {
+  const clickHandler = (event) => {
     event.preventDefault();
-    var oldCss = getValue(prefix);
-    var css = delCss(oldCss, getCssRules(event.target, false));
-    if (css == oldCss) css = delCss(oldCss, getCssRules(event.target, true));
-    if (css != oldCss) setValue(prefix, css);
-    replaceStyle(style, css ? css + none : "");
+    let currentCss = getValue(prefix);
+    let newCss = delCss(currentCss, getCssRules(event.target, false));
+    if (newCss === currentCss) newCss = delCss(currentCss, getCssRules(event.target, true));
+    if (newCss !== currentCss) setValue(prefix, newCss);
+    replaceStyle(style, newCss ? newCss + none : "");
     remove();
   };
 
-  var press = function (event) {
-    if (event.keyCode == 27) {
-      var css = getValue(prefix);
-      replaceStyle(style, css ? css + none : "");
+  const keyupHandler = (event) => {
+    if (event.keyCode === 27) {
+      replaceStyle(style, getValue(prefix) ? getValue(prefix) + none : "");
       remove();
     }
   };
 
   if (latest) {
-    css = delCss(css);
-    setValue(prefix, css);
-    replaceStyle(style, css ? css + none : "");
+    const newCss = delCss(css);
+    setValue(prefix, newCss);
+    replaceStyle(style, newCss ? newCss + none : "");
   } else {
     enabled = true;
-    replaceStyle(
-      style,
-      css +
-        "{background-color: red !important; border: 2px solid #FF1111 !important; opacity: 0.7 !important;}"
-    );
-    document.addEventListener("click", click, false);
-    document.addEventListener("keyup", press, false);
+    replaceStyle(style, css + "{background-color: red !important; border: 2px solid #FF1111 !important; opacity: 0.7 !important;}");
+    document.addEventListener("click", clickHandler, false);
+    document.addEventListener("keyup", keyupHandler, false);
   }
-}
+};
 
-function blockElement(wide) {
+// Block an element based on user interaction
+const blockElement = (wide) => {
   if (enabled) return;
-  var element = "",
-    outline = "",
-    border = "",
-    bgColor = "",
-    title = "",
-    reObjects = /^(iframe|object|embed)$/i;
 
-  var remove = function () {
-    document.removeEventListener("mouseover", over, false);
-    document.removeEventListener("mouseout", out, false);
-    document.removeEventListener("click", click, false);
-    document.removeEventListener("keyup", press, false);
+  let element = "", outline = "", border = "", bgColor = "", title = "";
+  const reObjects = /^(iframe|object|embed)$/i;
+
+  const remove = () => {
+    document.removeEventListener("mouseover", mouseOverHandler, false);
+    document.removeEventListener("mouseout", mouseOutHandler, false);
+    document.removeEventListener("click", clickHandler, false);
+    document.removeEventListener("keyup", keyupHandler, false);
     enabled = false;
   };
 
-  var over = function (event) {
+  const mouseOverHandler = (event) => {
     element = event.target;
     title = element.title;
     if (reObjects.test(element.nodeName)) {
@@ -245,7 +203,7 @@ function blockElement(wide) {
     }
   };
 
-  var out = function () {
+  const mouseOutHandler = () => {
     if (element) {
       element.title = title;
       if (reObjects.test(element.nodeName)) {
@@ -257,58 +215,51 @@ function blockElement(wide) {
     }
   };
 
-  var click = function (event) {
+  const clickHandler = (event) => {
     if (element) {
       event.preventDefault();
-      out();
+      mouseOutHandler();
       remove();
-      var css = getCssRules(element, wide || event.altKey);
-      var tmpCss = addStyle(
-        css +
-          "{background-color: red !important; border: 1px solid #FF1111 !important; opacity: 0.7 !important;}"
-      );
-      css = prompt(browser.i18n.getMessage("blockElementFromThePage"), css);
-      if (css) {
-        var oldCss = getValue(prefix);
-        if (oldCss) css = clearCss(oldCss + "," + css);
-        setValue(prefix, css);
+      const css = getCssRules(element, wide || event.altKey);
+      const tmpStyle = addStyle(`${css}{background-color: red !important; border: 1px solid #FF1111 !important; opacity: 0.7 !important;}`);
+      const userCss = prompt(browser.i18n.getMessage("blockElementFromThePage"), css);
+      if (userCss) {
+        const oldCss = getValue(prefix);
+        const newCss = clearCss(`${oldCss},${userCss}`);
+        setValue(prefix, newCss);
         if (style) {
-          replaceStyle(style, css + none);
+          replaceStyle(style, newCss + none);
         } else {
-          style = addStyle(css + none);
+          style = addStyle(newCss + none);
         }
       }
-      tmpCss.parentNode.removeChild(tmpCss);
+      tmpStyle.remove();
     }
   };
 
-  var press = function (event) {
-    if (event.keyCode == 27) {
-      out();
+  const keyupHandler = (event) => {
+    if (event.keyCode === 27) {
+      mouseOutHandler();
       remove();
     }
   };
 
   enabled = true;
-  document.addEventListener("mouseover", over, false);
-  document.addEventListener("mouseout", out, false);
-  document.addEventListener("click", click, false);
-  document.addEventListener("keyup", press, false);
-}
+  document.addEventListener("mouseover", mouseOverHandler, false);
+  document.addEventListener("mouseout", mouseOutHandler, false);
+  document.addEventListener("click", clickHandler, false);
+  document.addEventListener("keyup", keyupHandler, false);
+};
 
-document.addEventListener(
-  "keydown",
-  function (e) {
-    if (e.altKey && e.shiftKey && e.keyCode === 78) { // Alt + Shift + N
-      // block element
+// Keyboard shortcuts to manage blocking and unblocking elements
+document.addEventListener("keydown", (e) => {
+  if (e.altKey && e.shiftKey) {
+    if (e.keyCode === 78) { // Alt + Shift + N
       blockElement();
-    } else if (e.altKey && e.shiftKey && e.keyCode === 88) { // Alt + Shift + X
-      // see blocked elements
+    } else if (e.keyCode === 88) { // Alt + Shift + X
       unblockElement();
-    } else if (e.altKey && e.shiftKey && e.keyCode === 77) { // Alt + Shift + M
-      // undo block element
+    } else if (e.keyCode === 77) { // Alt + Shift + M
       unblockElement(true);
     }
-  },
-  false
-);
+  }
+}, false);
