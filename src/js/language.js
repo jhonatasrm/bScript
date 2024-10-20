@@ -1,7 +1,11 @@
+// Update elements with either manifest data or i18n messages
 document.querySelectorAll("[data-manifest], [data-i18n]").forEach(element => {
-  if (element.dataset.manifest) {
-    element.textContent = Manifest[element.dataset.manifest];
-  } else if (element.dataset.i18n) {
-    element.textContent = browser.i18n.getMessage(element.dataset.i18n);
+  const manifestKey = element.dataset.manifest;
+  const i18nKey = element.dataset.i18n;
+
+  if (manifestKey) {
+    element.textContent = Manifest[manifestKey];
+  } else if (i18nKey) {
+    element.textContent = browser.i18n.getMessage(i18nKey);
   }
 });
