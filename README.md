@@ -7,7 +7,9 @@
 
 # bScript [<img align="right" style="width:auto;height:32px;" src="https://raw.githubusercontent.com/jhonatasrm/jhonatasrm.github.io/master/images/addon-firefox.png">](https://addons.mozilla.org/en-US/firefox/addon/bScript/)
 
-This Add-on works by blocking the operation of JavaScript in your browser, you can also block elements of the page. The recommendation is not to enable JavaScript for all pages. This Add-on launches the tab with JavaScript enabled, because some pages may not load correctly. The recommended is to disable JavaScript as soon as possible on the page by clicking the Add-on icon, the preference will be saved for the next visit.
+This Add-on works by blocking the operation of JavaScript in your browser, and it also allows you to block elements on the page. The recommendation is not to enable JavaScript for all pages. This Add-on launches the tab with JavaScript enabled because some pages may not load correctly without it. The recommended approach is to disable JavaScript as soon as possible on the page by clicking the Add-on icon.
+
+When you disable JavaScript, it will only affect the current tab, and this preference will be saved for future visits to the same site, ensuring that JavaScript remains blocked the next time you visit that site.
 
 ![bScript Screenshot](bScript.gif)
 
@@ -19,20 +21,15 @@ This Add-on works by blocking the operation of JavaScript in your browser, you c
 ## Features
 The Add-on currently has the following features:
 
-1. Block Ads with the Block Element option
-
-2. Block JavaScript by Tab
-
-3. See the Blocked Elements in the page
-
-4. Unblock Elements in the page
+* Block Ads with the Block Element option
+* Block JavaScript by Tab
+* See the Blocked Elements in the page
+* Unblock Elements in the page
 
 ## Shortcuts
-1. Block Element: Alt + Shift + N
-
-2. See Blocked Elements: Alt + Shift + X
-
-3. Unblock Elements: Alt + Shift + M
+* Block Element: Alt + Shift + N
+* See Blocked Elements: Alt + Shift + X
+* Unblock Elements: Alt + Shift + M
 
 ## How Contribute
 Have a suggestion, doubt or encountered an error? Please open a new [issue](https://github.com/jhonatasrm/bScript/issues).
